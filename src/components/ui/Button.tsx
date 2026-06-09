@@ -17,16 +17,16 @@ export function Button({
   className,
 }: ButtonProps) {
   const styles = cn(
-    "inline-flex items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/20",
+    "inline-flex items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40",
     variant === "primary" &&
-      "bg-foreground text-background hover:bg-foreground/90",
+      "bg-foreground text-background hover:bg-foreground/90 hover:shadow-glow",
     variant === "secondary" &&
-      "border border-border text-foreground hover:bg-surface",
-    variant === "ghost" && "text-muted hover:text-foreground",
+      "border border-border text-foreground hover:border-accent/40 hover:text-accent",
+    variant === "ghost" && "text-muted hover:text-accent",
     className
   );
 
-  if (external || href.startsWith("http") || href.endsWith(".pdf")) {
+  if (external || href.startsWith("http") || href.endsWith(".pdf") || href.startsWith("mailto:")) {
     return (
       <a
         href={href}

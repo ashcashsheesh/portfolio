@@ -1,17 +1,19 @@
-import { experience, sections } from "@/data";
+import { experience, experienceSection } from "@/data";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { SectionWrapper } from "@/components/ui/SectionWrapper";
+import { StaggerChildren, StaggerItem } from "@/components/ui/Motion";
 
 export function Experience() {
-  const { experience: sectionMeta } = sections;
-
   return (
     <SectionWrapper id="experience" className="border-t border-border/60">
-      <SectionHeader label={sectionMeta.label} title={sectionMeta.title} />
+      <SectionHeader
+        label={experienceSection.label}
+        title={experienceSection.title}
+      />
 
-      <div className="divide-y divide-border">
+      <StaggerChildren className="divide-y divide-border">
         {experience.map((entry) => (
-          <article
+          <StaggerItem
             key={entry.id}
             className="grid gap-2 py-6 first:pt-0 last:pb-0 sm:grid-cols-[1fr_auto] sm:gap-8"
           >
@@ -20,10 +22,12 @@ export function Experience() {
               <p className="mt-0.5 text-sm text-muted">{entry.organization}</p>
               <p className="mt-2 text-sm text-muted/80">{entry.description}</p>
             </div>
-            <p className="text-xs text-muted sm:text-right sm:pt-0.5">{entry.timeframe}</p>
-          </article>
+            <p className="text-xs text-muted sm:text-right sm:pt-0.5">
+              {entry.timeframe}
+            </p>
+          </StaggerItem>
         ))}
-      </div>
+      </StaggerChildren>
     </SectionWrapper>
   );
 }

@@ -1,4 +1,5 @@
 import { Footer } from "@/components/layout/Footer";
+import { LoadingIntro } from "@/components/layout/LoadingIntro";
 import { Navbar } from "@/components/layout/Navbar";
 import { About } from "@/components/sections/About";
 import { Academics } from "@/components/sections/Academics";
@@ -10,6 +11,7 @@ import { Projects } from "@/components/sections/Projects";
 export default function Home() {
   return (
     <>
+      <LoadingIntro />
       <Navbar />
       <main>
         <Hero />

@@ -1,23 +1,33 @@
-import { ArrowUpRight, Code } from "lucide-react";
+"use client";
+
+import { motion } from "framer-motion";
+import { ArrowUpRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import type { Project } from "@/data/types";
 
 export function ProjectCard({ project }: { project: Project }) {
   return (
-    <article className="group flex h-full flex-col overflow-hidden rounded-xl border border-border bg-background transition-colors duration-200 hover:border-foreground/15 hover:shadow-card">
+    <motion.article
+      whileHover={{ y: -4 }}
+      transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+      className="group flex h-full flex-col overflow-hidden rounded-xl border border-border bg-background transition-colors duration-300 hover:border-accent/30 hover:shadow-card"
+    >
       <div className="relative aspect-[16/10] overflow-hidden bg-surface">
         <Image
           src={project.imageUrl}
           alt={`${project.title} preview`}
           fill
-          className="object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+          className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         />
+        <div className="absolute inset-0 bg-accent/0 transition-colors duration-300 group-hover:bg-accent/5" />
       </div>
 
       <div className="flex flex-1 flex-col p-5">
-        <h3 className="text-base font-medium text-foreground">{project.title}</h3>
+        <h3 className="text-base font-medium text-foreground transition-colors duration-300 group-hover:text-accent">
+          {project.title}
+        </h3>
         <p className="mt-2 text-sm leading-relaxed text-muted">{project.description}</p>
 
         <div className="mt-4 flex flex-wrap gap-1.5">
@@ -31,33 +41,20 @@ export function ProjectCard({ project }: { project: Project }) {
           ))}
         </div>
 
-        {(project.githubUrl || project.demoUrl) && (
-          <div className="mt-auto flex gap-4 pt-5">
-            {project.githubUrl && (
-              <Link
-                href={project.githubUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 text-xs text-muted transition-colors hover:text-foreground"
-              >
-                <Code className="h-3.5 w-3.5" />
-                Code
-              </Link>
-            )}
-            {project.demoUrl && (
-              <Link
-                href={project.demoUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 text-xs text-muted transition-colors hover:text-foreground"
-              >
-                <ArrowUpRight className="h-3.5 w-3.5" />
-                Live
-              </Link>
-            )}
+        {project.demoUrl && (
+          <div className="mt-auto pt-5">
+            <Link
+              href={project.demoUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 text-xs text-muted transition-colors duration-300 hover:text-accent"
+            >
+              <ArrowUpRight className="h-3.5 w-3.5" />
+              View
+            </Link>
           </div>
         )}
       </div>
-    </article>
+    </motion.article>
   );
 }

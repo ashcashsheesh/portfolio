@@ -7,21 +7,24 @@ import type { Honor } from "./types";
 
 export const academics = {
   /** Shown subtly — use format you prefer, e.g. "4.0 / 4.0" or "Weighted 4.5" */
-  gpa: "4.0 / 4.0",
+  gpa: "(in progress)",
 
   /** AP and advanced coursework */
   apCourses: [
-    "AP Computer Science A",
-    "AP Calculus BC",
-    "AP Physics C",
-    "AP Statistics",
-    "AP English Language",
+    "AP Computer Science Principles",
+    "AP World History",
+    "AP Pre-Calculus",
+    "AP Physics 1",
+    "AP United States History",
+    "AP Statistics (in progress)",
+    "AP Psychology (in progress)",
+    "AP Biology (in progress)",
+    "AP Calculus BC (in progress)",
   ],
 
   /** Honors, awards, and recognition */
   honors: [
-    { title: "National Merit Semifinalist", year: "2025" },
-    { title: "Regional Science Fair — 2nd Place", year: "2024" },
-    { title: "Dean's List", year: "2023 — 2025" },
+    { title: "(in progress)", year: "(in progress)" },
   ] satisfies Honor[],
+  
 };

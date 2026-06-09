@@ -1,54 +1,25 @@
 /**
- * Portfolio projects — the primary showcase section.
- * EDIT: Add projects with title, short description, tags, links, and thumbnail.
+ * Projects section — edit section title and all project cards here.
  *
- * Images: place files in /public/projects/ and reference as "/projects/filename.svg"
+ * Images: place files in /public/projects/ and set imageUrl to "/projects/filename.svg"
+ * demoUrl: optional live demo link (omit if none)
  */
-
+  
 import type { Project } from "./types";
+
+export const projectsSection = {
+  label: "Projects",
+  title: "Selected work",
+};
 
 export const projects: Project[] = [
   {
-    id: "attention-study",
-    title: "Attention & Distraction Study",
-    description: "Survey research on notification frequency and focus during study sessions.",
-    technologies: ["Python", "Pandas", "Matplotlib"],
+    id: "Clarity Board",
+    title: "Clarity Board",
+    description:
+      "A browser-based augmentative communication workspace that helps patients recovering from encephalitis or neurological trauma communicate at the bedside using webcam eye-tracking to select large, easy-to-hit tiles.",
+    technologies: ["TypeScript", "React", "React Router", "CSS"],
     imageUrl: "/projects/project-1.svg",
-    githubUrl: "https://github.com/your-username/attention-study",
     featured: true,
-  },
-  {
-    id: "habit-tracker",
-    title: "Habit Tracker",
-    description: "Minimal web app for tracking habits with brief reflection prompts.",
-    technologies: ["Next.js", "TypeScript", "Tailwind CSS"],
-    imageUrl: "/projects/project-2.svg",
-    githubUrl: "https://github.com/your-username/habit-tracker",
-    demoUrl: "https://your-demo.vercel.app",
-    featured: true,
-  },
-  {
-    id: "nlp-sentiment",
-    title: "Sentiment Explorer",
-    description: "Tool for visualizing sentiment patterns in short text samples.",
-    technologies: ["Python", "Hugging Face", "Streamlit"],
-    imageUrl: "/projects/project-3.svg",
-    githubUrl: "https://github.com/your-username/sentiment-explorer",
-    featured: true,
-  },
-  {
-    id: "ux-audit",
-    title: "Platform UX Audit",
-    description: "Heuristic evaluation and redesign proposal for a learning platform.",
-    technologies: ["Figma", "User Research"],
-    imageUrl: "/projects/project-4.svg",
-    demoUrl: "https://figma.com/file/your-file",
-  },
-  {
-    id: "research-summary",
-    title: "Cognitive Load — Summary",
-    description: "Concise synthesis of cognitive load theory for instructional design.",
-    technologies: ["LaTeX", "Research"],
-    imageUrl: "/projects/project-5.svg",
   },
 ];
