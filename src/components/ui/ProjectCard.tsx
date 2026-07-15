@@ -3,16 +3,14 @@
 import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
 import type { Project } from "@/data/types";
 
+const cardClassName =
+  "group flex h-full flex-col overflow-hidden rounded-xl border border-border bg-background transition-colors duration-300 hover:border-accent/30 hover:shadow-card";
+
 export function ProjectCard({ project }: { project: Project }) {
-  return (
-    <motion.article
-      whileHover={{ y: -4 }}
-      transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-      className="group flex h-full flex-col overflow-hidden rounded-xl border border-border bg-background transition-colors duration-300 hover:border-accent/30 hover:shadow-card"
-    >
+  const content = (
+    <>
       <div className="relative aspect-[16/10] overflow-hidden bg-surface">
         <Image
           src={project.imageUrl}
@@ -43,18 +41,38 @@ export function ProjectCard({ project }: { project: Project }) {
 
         {project.demoUrl && (
           <div className="mt-auto pt-5">
-            <Link
-              href={project.demoUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 text-xs text-muted transition-colors duration-300 hover:text-accent"
-            >
+            <span className="inline-flex items-center gap-1.5 text-xs text-muted transition-colors duration-300 group-hover:text-accent">
               <ArrowUpRight className="h-3.5 w-3.5" />
-              View
-            </Link>
+              Visit site
+            </span>
           </div>
         )}
       </div>
+    </>
+  );
+
+  if (project.demoUrl) {
+    return (
+      <motion.a
+        href={project.demoUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        whileHover={{ y: -4 }}
+        transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+        className={cardClassName}
+      >
+        {content}
+      </motion.a>
+    );
+  }
+
+  return (
+    <motion.article
+      whileHover={{ y: -4 }}
+      transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+      className={cardClassName}
+    >
+      {content}
     </motion.article>
   );
 }
