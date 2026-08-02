@@ -43,4 +43,14 @@ export const projects: Project[] = [
     featured: true,
     demoUrl: "https://covenant-apparel.vercel.app/",
   },
+  {
+    id: "mini-minds",
+    title: "MiniMinds",
+    description:
+      "A playful learning site for curious kids — pick a spark like robots, space, or animals, then jump into short games, puzzles, and stories with Minny, your cheering robot buddy. Big ideas, tiny plays, and no scores or stress.",
+    technologies: ["Next.js", "React", "TypeScript"],
+    imageUrl: "/projects/project-4.svg",
+    featured: true,
+    demoUrl: "https://mini-minds-nine.vercel.app/",
+  },
 ];
