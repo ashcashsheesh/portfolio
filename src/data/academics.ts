@@ -10,13 +10,7 @@ export const academics = {
   gpa: "(in progress)",
 
   /** AP and advanced coursework */
-  apCourses: [
-    "AP Computer Science Principles",
-    "AP World History",
-    "AP Pre-Calculus",
-    "AP Physics 1",
-    "AP United States History",
-  ],
+  apCourses: ["(in progress)"],
 
   /** Honors, awards, and recognition */
   honors: [
