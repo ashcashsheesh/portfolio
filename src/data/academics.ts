@@ -16,10 +16,6 @@ export const academics = {
     "AP Pre-Calculus",
     "AP Physics 1",
     "AP United States History",
-    "AP Statistics (in progress)",
-    "AP Psychology (in progress)",
-    "AP Biology (in progress)",
-    "AP Calculus BC (in progress)",
   ],
 
   /** Honors, awards, and recognition */

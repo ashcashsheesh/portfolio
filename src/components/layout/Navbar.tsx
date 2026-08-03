@@ -1,16 +1,20 @@
 "use client";
 
 import { Menu, X } from "lucide-react";
-import Link from "next/link";
 import { useEffect, useState } from "react";
+import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { navigation, personal } from "@/data";
-import { useActiveSection } from "@/hooks/useActiveSection";
+import { HOME_SECTION_ID, useActiveSection } from "@/hooks/useActiveSection";
+import { scrollToSection } from "@/lib/scroll";
 import { cn } from "@/lib/utils";
+
+const navActiveClass =
+  "font-medium text-accent shadow-[0_0_16px_-2px_var(--accent-muted)]";
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const activeSection = useActiveSection();
+  const { activeSection, setActive } = useActiveSection();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 16);
@@ -26,7 +30,13 @@ export function Navbar() {
     };
   }, [mobileOpen]);
 
-  const handleNavClick = () => setMobileOpen(false);
+  const handleNavClick = (event: React.MouseEvent<HTMLAnchorElement>, sectionId: string) => {
+    event.preventDefault();
+    scrollToSection(sectionId);
+    setActive(sectionId);
+    setMobileOpen(false);
+  };
+
   const showBlur = scrolled || mobileOpen;
 
   return (
@@ -46,13 +56,18 @@ export function Navbar() {
           className="relative mx-auto flex h-16 max-w-6xl items-center justify-between px-6 sm:px-8"
           aria-label="Main navigation"
         >
-          <Link
+          <a
             href="#hero"
-            className="text-sm font-medium tracking-tight text-foreground transition-colors duration-200 hover:text-accent"
-            onClick={handleNavClick}
+            className={cn(
+              "rounded-md px-3 py-2 text-sm font-medium tracking-tight transition-all duration-200",
+              activeSection === HOME_SECTION_ID
+                ? navActiveClass
+                : "text-foreground hover:text-accent"
+            )}
+            onClick={(event) => handleNavClick(event, HOME_SECTION_ID)}
           >
-            {personal.name.split(" ")[0]}
-          </Link>
+            {personal.name}
+          </a>
 
           <div className="hidden items-center gap-1 md:flex">
             {navigation.map((link) => {
@@ -60,31 +75,33 @@ export function Navbar() {
               const isActive = activeSection === sectionId;
 
               return (
-                <Link
+                <a
                   key={link.href}
                   href={link.href}
+                  onClick={(event) => handleNavClick(event, sectionId)}
                   className={cn(
-                    "rounded-md px-3 py-2 text-sm transition-colors duration-200",
-                    isActive
-                      ? "font-medium text-accent"
-                      : "text-muted hover:text-foreground"
+                    "rounded-md px-3 py-2 text-sm transition-all duration-200",
+                    isActive ? navActiveClass : "text-muted hover:text-foreground"
                   )}
                 >
                   {link.label}
-                </Link>
+                </a>
               );
             })}
           </div>
 
-          <button
-            type="button"
-            className="inline-flex h-9 w-9 items-center justify-center rounded-md text-muted transition-colors duration-200 hover:text-accent md:hidden"
-            aria-label={mobileOpen ? "Close menu" : "Open menu"}
-            aria-expanded={mobileOpen}
-            onClick={() => setMobileOpen((open) => !open)}
-          >
-            {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-          </button>
+          <div className="flex items-center gap-1">
+            <ThemeToggle />
+            <button
+              type="button"
+              className="inline-flex h-9 w-9 items-center justify-center rounded-md text-muted transition-colors duration-200 hover:text-accent md:hidden"
+              aria-label={mobileOpen ? "Close menu" : "Open menu"}
+              aria-expanded={mobileOpen}
+              onClick={() => setMobileOpen((open) => !open)}
+            >
+              {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            </button>
+          </div>
         </nav>
       </header>
 
@@ -92,7 +109,7 @@ export function Navbar() {
         <div
           className="fixed inset-0 z-40 bg-background/40 backdrop-blur-sm md:hidden"
           aria-hidden
-          onClick={handleNavClick}
+          onClick={() => setMobileOpen(false)}
         />
       )}
 
@@ -115,19 +132,17 @@ export function Navbar() {
             const isActive = activeSection === sectionId;
 
             return (
-              <Link
+              <a
                 key={link.href}
                 href={link.href}
-                onClick={handleNavClick}
+                onClick={(event) => handleNavClick(event, sectionId)}
                 className={cn(
-                  "rounded-md px-4 py-3 text-sm transition-colors duration-200",
-                  isActive
-                    ? "font-medium text-accent"
-                    : "text-muted hover:text-foreground"
+                  "rounded-md px-4 py-3 text-sm transition-all duration-200",
+                  isActive ? navActiveClass : "text-muted hover:text-foreground"
                 )}
               >
                 {link.label}
-              </Link>
+              </a>
             );
           })}
         </div>

@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { scrollToSection } from "@/lib/scroll";
 import { cn } from "@/lib/utils";
 
 type ButtonProps = {
@@ -25,6 +28,21 @@ export function Button({
     variant === "ghost" && "text-muted hover:text-accent",
     className
   );
+
+  if (href.startsWith("#")) {
+    return (
+      <a
+        href={href}
+        className={styles}
+        onClick={(event) => {
+          event.preventDefault();
+          scrollToSection(href);
+        }}
+      >
+        {children}
+      </a>
+    );
+  }
 
   if (external || href.startsWith("http") || href.endsWith(".pdf") || href.startsWith("mailto:")) {
     return (
