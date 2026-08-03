@@ -13,17 +13,6 @@ type RunThemeTransitionOptions = {
   onComplete: () => void;
 };
 
-declare global {
-  interface Document {
-    startViewTransition?: (updateCallback: () => void | Promise<void>) => {
-      ready: Promise<void>;
-      finished: Promise<void>;
-      updateCallbackDone: Promise<void>;
-      skipTransition: () => void;
-    };
-  }
-}
-
 export function prefersReducedMotion(): boolean {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
@@ -127,7 +116,7 @@ export async function runThemeTransition({
   }
 
   const unlockScroll = lockScroll();
-  const transition = document.startViewTransition!(applyClass);
+  const transition = document.startViewTransition(applyClass);
 
   try {
     await transition.ready;
