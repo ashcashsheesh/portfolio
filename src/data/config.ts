@@ -14,8 +14,9 @@ export const personal = {
   name: "Asher Nam",
   subtitle: "Portfolio and selected work.",
   email: "asher.nam@gmail.com",
-  /** Path to resume PDF in /public */
-  resumeUrl: "/resume.pdf",
+  phone: "(408) 604-5184",
+  /** Served by src/app/resume/route.ts from public/resume.pdf */
+  resumeUrl: "/resume",
 };
 
 export const navigation: NavLink[] = [

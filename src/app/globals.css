@@ -36,7 +36,7 @@
 
 html {
   background: var(--background);
-  color-scheme: light;
+  color-scheme: light dark;
   scroll-behavior: smooth;
 }
 
@@ -72,19 +72,4 @@ body {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
-}
-
-/* Theme toggle — circular wipe (View Transitions API + WAAPI clip-path) */
-::view-transition-old(root),
-::view-transition-new(root) {
-  animation: none;
-  mix-blend-mode: normal;
-}
-
-::view-transition-old(root) {
-  z-index: 1;
-}
-
-::view-transition-new(root) {
-  z-index: 9999;
 }

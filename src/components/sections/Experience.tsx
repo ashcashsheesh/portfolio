@@ -20,11 +20,15 @@ export function Experience() {
             <div>
               <h3 className="text-sm font-medium text-foreground">{entry.title}</h3>
               <p className="mt-0.5 text-sm text-muted">{entry.organization}</p>
-              <p className="mt-2 text-sm text-muted/80">{entry.description}</p>
+              {entry.description ? (
+                <p className="mt-2 text-sm text-muted/80">{entry.description}</p>
+              ) : null}
             </div>
-            <p className="text-xs text-muted sm:text-right sm:pt-0.5">
-              {entry.timeframe}
-            </p>
+            {entry.timeframe ? (
+              <p className="text-xs text-muted sm:text-right sm:pt-0.5">
+                {entry.timeframe}
+              </p>
+            ) : null}
           </StaggerItem>
         ))}
       </StaggerChildren>

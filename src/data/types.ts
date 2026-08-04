@@ -21,6 +21,8 @@ export type Project = {
   githubUrl?: string;
   demoUrl?: string;
   featured?: boolean;
+  /** Shows a caution-tape overlay on the card */
+  underConstruction?: boolean;
 };
 
 export type Experience = {

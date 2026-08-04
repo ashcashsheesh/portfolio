@@ -42,6 +42,7 @@ export const projects: Project[] = [
     imageUrl: "/projects/project-3.svg",
     featured: true,
     demoUrl: "https://covenant-apparel.vercel.app/",
+    underConstruction: true,
   },
   {
     id: "mini-minds",
@@ -52,5 +53,6 @@ export const projects: Project[] = [
     imageUrl: "/projects/project-4.svg",
     featured: true,
     demoUrl: "https://mini-minds-nine.vercel.app/",
+    underConstruction: true,
   },
 ];

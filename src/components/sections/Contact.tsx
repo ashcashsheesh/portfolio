@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { personal, sections } from "@/data";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { SectionWrapper } from "@/components/ui/SectionWrapper";
@@ -12,12 +11,10 @@ export function Contact() {
       <SectionHeader label={sectionMeta.label} title={sectionMeta.title} />
 
       <FadeIn>
-        <Link
-          href={`mailto:${personal.email}`}
-          className="text-sm text-foreground transition-colors duration-300 hover:text-accent"
-        >
-          {personal.email}
-        </Link>
+        <div className="flex flex-col gap-2 text-sm text-foreground">
+          <p>{personal.email}</p>
+          <p>{personal.phone}</p>
+        </div>
       </FadeIn>
     </SectionWrapper>
   );

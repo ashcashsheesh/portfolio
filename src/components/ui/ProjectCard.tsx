@@ -6,11 +6,39 @@ import Image from "next/image";
 import type { Project } from "@/data/types";
 
 const cardClassName =
-  "group flex h-full flex-col overflow-hidden rounded-xl border border-border bg-background transition-colors duration-300 hover:border-accent/30 hover:shadow-card";
+  "group relative flex h-full flex-col overflow-hidden rounded-xl border border-border bg-background transition-colors duration-300 hover:border-accent/30 hover:shadow-card";
+
+function CautionTape() {
+  return (
+    <div
+      className="pointer-events-none absolute inset-0 z-20 overflow-hidden"
+      aria-hidden="true"
+    >
+      <div className="absolute inset-0 bg-background/25" />
+      <div className="absolute left-1/2 top-1/2 w-[160%] -translate-x-1/2 -translate-y-1/2 -rotate-[18deg]">
+        <div
+          className="border-y-[3px] border-neutral-900 py-2.5 shadow-md"
+          style={{
+            backgroundImage:
+              "repeating-linear-gradient(-45deg, #facc15 0 14px, #171717 14px 28px)",
+          }}
+        >
+          <div className="bg-yellow-400 py-1.5 text-center">
+            <p className="text-[11px] font-black uppercase tracking-[0.35em] text-neutral-900 sm:text-xs">
+              Under Construction
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export function ProjectCard({ project }: { project: Project }) {
   const content = (
     <>
+      {project.underConstruction && <CautionTape />}
+
       <div className="relative aspect-[16/10] overflow-hidden bg-surface">
         <Image
           src={project.imageUrl}

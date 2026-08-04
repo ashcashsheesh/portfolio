@@ -1,130 +1,156 @@
 "use client";
 
-import { AnimatePresence, motion } from "framer-motion";
 import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useEffect, useRef, useState } from "react";
-import { easeOut } from "@/lib/motion";
-import { runThemeTransition } from "@/lib/theme-transition";
 import { cn } from "@/lib/utils";
+
+const ICON_MS = 300;
+const EASING = "ease-in-out";
 
 type ThemeToggleProps = {
   className?: string;
 };
 
-/** 1 = switching to dark, -1 = switching to light */
-type ToggleDirection = 1 | -1;
+function slidePair(
+  outgoing: HTMLElement,
+  incoming: HTMLElement,
+  toDark: boolean
+) {
+  const outY = toDark ? "-100%" : "100%";
+  const inY = toDark ? "100%" : "-100%";
 
-const iconTransition = { duration: 0.28, ease: easeOut };
+  return [
+    outgoing.animate(
+      [
+        { transform: "translateY(0%)", opacity: 1 },
+        { transform: `translateY(${outY})`, opacity: 0 },
+      ],
+      { duration: ICON_MS, easing: EASING, fill: "forwards" }
+    ),
+    incoming.animate(
+      [
+        { transform: `translateY(${inY})`, opacity: 0 },
+        { transform: "translateY(0%)", opacity: 1 },
+      ],
+      { duration: ICON_MS, easing: EASING, fill: "forwards" }
+    ),
+  ];
+}
 
 export function ThemeToggle({ className }: ThemeToggleProps) {
   const { setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
-  const [displayDark, setDisplayDark] = useState(false);
-  const [direction, setDirection] = useState<ToggleDirection>(1);
-  const buttonRef = useRef<HTMLButtonElement>(null);
+  const [isDark, setIsDark] = useState(false);
+  const sunRef = useRef<HTMLSpanElement>(null);
+  const moonRef = useRef<HTMLSpanElement>(null);
+  const lightLabelRef = useRef<HTMLSpanElement>(null);
+  const darkLabelRef = useRef<HTMLSpanElement>(null);
   const busyRef = useRef(false);
 
   useEffect(() => {
     setMounted(true);
-    setDisplayDark(document.documentElement.classList.contains("dark"));
+    setIsDark(document.documentElement.classList.contains("dark"));
   }, []);
 
-  const toggleTheme = () => {
-    if (!mounted || busyRef.current || !buttonRef.current) return;
+  const onToggle = () => {
+    if (!mounted || busyRef.current) return;
 
-    // DOM class is the source of truth for the next flip (reliable on first click).
-    const currentlyDark = document.documentElement.classList.contains("dark");
-    const nextTheme = currentlyDark ? "light" : "dark";
-    const nextDirection: ToggleDirection = nextTheme === "dark" ? 1 : -1;
+    const sun = sunRef.current;
+    const moon = moonRef.current;
+    const lightLabel = lightLabelRef.current;
+    const darkLabel = darkLabelRef.current;
+    if (!sun || !moon || !lightLabel || !darkLabel) return;
 
-    const rect = buttonRef.current.getBoundingClientRect();
-    const originX = rect.left + rect.width / 2;
-    const originY = rect.top + rect.height / 2;
+    const nextIsDark = !document.documentElement.classList.contains("dark");
+    const nextTheme = nextIsDark ? "dark" : "light";
 
     busyRef.current = true;
 
-    // Icon / label update immediately; page wipe syncs next-themes after.
-    setDirection(nextDirection);
-    setDisplayDark(nextTheme === "dark");
+    // WAAPI — survives next-themes `disableTransitionOnChange` (kills CSS transitions).
+    const outgoingIcon = nextIsDark ? sun : moon;
+    const incomingIcon = nextIsDark ? moon : sun;
+    const outgoingLabel = nextIsDark ? lightLabel : darkLabel;
+    const incomingLabel = nextIsDark ? darkLabel : lightLabel;
 
-    void runThemeTransition({
-      nextTheme,
-      originX,
-      originY,
-      onComplete: () => {
-        setTheme(nextTheme);
+    const animations = [
+      ...slidePair(outgoingIcon, incomingIcon, nextIsDark),
+      ...slidePair(outgoingLabel, incomingLabel, nextIsDark),
+    ];
+
+    document.documentElement.classList.toggle("dark", nextIsDark);
+    setTheme(nextTheme);
+
+    void Promise.all(animations.map((a) => a.finished))
+      .catch(() => {})
+      .then(() => {
+        for (const anim of animations) {
+          anim.commitStyles();
+          anim.cancel();
+        }
+        setIsDark(nextIsDark);
         busyRef.current = false;
-      },
-    });
+      });
   };
 
   return (
     <button
-      ref={buttonRef}
       type="button"
-      aria-label={displayDark ? "Switch to light mode" : "Switch to dark mode"}
-      onClick={toggleTheme}
+      aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
+      onClick={onToggle}
       className={cn(
         "inline-flex h-8 items-center gap-1.5 rounded-full border border-border/80 px-2.5 text-xs text-muted transition-colors duration-200 hover:border-accent/30 hover:text-foreground",
         className
       )}
     >
       <span className="relative inline-flex h-3.5 w-3.5 shrink-0 overflow-hidden">
-        {mounted && (
-          <AnimatePresence mode="popLayout" initial={false} custom={direction}>
-            {displayDark ? (
-              <motion.span
-                key="sun"
-                custom={direction}
-                variants={{
-                  enter: (dir: ToggleDirection) => ({
-                    y: dir === 1 ? -14 : 14,
-                    opacity: 0,
-                  }),
-                  center: { y: 0, opacity: 1 },
-                  exit: (dir: ToggleDirection) => ({
-                    y: dir === -1 ? -14 : 14,
-                    opacity: 0,
-                  }),
-                }}
-                initial="enter"
-                animate="center"
-                exit="exit"
-                transition={iconTransition}
-                className="absolute inset-0 flex items-center justify-center"
-              >
-                <Sun className="h-3.5 w-3.5" />
-              </motion.span>
-            ) : (
-              <motion.span
-                key="moon"
-                custom={direction}
-                variants={{
-                  enter: (dir: ToggleDirection) => ({
-                    y: dir === 1 ? -14 : 14,
-                    opacity: 0,
-                  }),
-                  center: { y: 0, opacity: 1 },
-                  exit: (dir: ToggleDirection) => ({
-                    y: dir === -1 ? -14 : 14,
-                    opacity: 0,
-                  }),
-                }}
-                initial="enter"
-                animate="center"
-                exit="exit"
-                transition={iconTransition}
-                className="absolute inset-0 flex items-center justify-center"
-              >
-                <Moon className="h-3.5 w-3.5" />
-              </motion.span>
-            )}
-          </AnimatePresence>
-        )}
+        <span
+          ref={sunRef}
+          className="absolute inset-0 flex items-center justify-center"
+          style={{
+            transform: isDark ? "translateY(-100%)" : "translateY(0%)",
+            opacity: isDark ? 0 : 1,
+          }}
+        >
+          <Sun className="h-3.5 w-3.5" />
+        </span>
+        <span
+          ref={moonRef}
+          className="absolute inset-0 flex items-center justify-center"
+          style={{
+            transform: isDark ? "translateY(0%)" : "translateY(100%)",
+            opacity: isDark ? 1 : 0,
+          }}
+        >
+          <Moon className="h-3.5 w-3.5" />
+        </span>
       </span>
 
-      <span className="hidden sm:inline">{displayDark ? "Light" : "Dark"}</span>
+      <span className="relative hidden h-4 overflow-hidden sm:inline-block">
+        <span className="invisible inline-block" aria-hidden="true">
+          Light
+        </span>
+        <span
+          ref={lightLabelRef}
+          className="absolute inset-0 flex items-center"
+          style={{
+            transform: isDark ? "translateY(-100%)" : "translateY(0%)",
+            opacity: isDark ? 0 : 1,
+          }}
+        >
+          Light
+        </span>
+        <span
+          ref={darkLabelRef}
+          className="absolute inset-0 flex items-center"
+          style={{
+            transform: isDark ? "translateY(0%)" : "translateY(100%)",
+            opacity: isDark ? 1 : 0,
+          }}
+        >
+          Dark
+        </span>
+      </span>
     </button>
   );
 }
