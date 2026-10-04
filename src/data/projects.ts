@@ -55,4 +55,14 @@ export const projects: Project[] = [
     demoUrl: "https://mini-minds-nine.vercel.app/",
     underConstruction: true,
   },
+  {
+    id: "praise-slides",
+    title: "Praise Slides",
+    description:
+      "A fast worship-lyrics tool for church AV teams — paste a song, set lines per slide, strip parentheses, and generate clean presentation slides ready for service.",
+    technologies: ["Next.js", "React", "TypeScript"],
+    imageUrl: "/projects/project-5.svg",
+    featured: true,
+    demoUrl: "https://church-brown-alpha.vercel.app/",
+  },
 ];
